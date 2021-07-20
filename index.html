@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="bootstrap.min.css" />
+  <title>Document</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h2><b>April</b> 2020</h2>
+    </div>
+    <div class="content">
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel"></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="myform">
+                <div class="row mb-3">
+                  <div class="col-auto">
+                    <label for="inputTitle" class="col-form-label">Title:</label>
+                  </div>
+                  <div class="col-9">
+                    <input type="text" id="inputTitle" class="form-control" aria-describedby="titleHelpInline"
+                      autocomplete="off" />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-auto">
+                    <label class="input-group-type" for="inputGroupSelect01">Type:</label>
+                  </div>
+                  <div class="col-9">
+                    <select class="form-select" id="inputGroupSelect">
+                      <option hidden disabled selected value></option>
+                      <option value="1">Annual Leave</option>
+                      <option value="2">Sick Leave</option>
+                      <option value="3">Special Leave</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-auto">
+                    <label for="message-text" class="col-form-label">Reason:</label>
+                  </div>
+                  <div class="col-9">
+                    <textarea class="form-control" id="message-text"></textarea>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-auto">
+                    <label for="input-date" class="col-form-label">Start Date:</label>
+                  </div>
+                  <div class="col-8">
+                    <input class="form-control" id="start-date" autocomplete="off" value="01/04/2020"></input>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-auto">
+                    <label for="input-date" class="col-form-label">End Date:</label>
+                  </div>
+                  <div class="col-8">
+                    <input class="form-control" id="end-date" autocomplete="off" value="01/04/2020"></input>
+                  </div>
+                </div>
+                <button type="submit" class=" btn btn-primary" data-bs-dismiss="modal">Submit</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <table class="table table-borderless">
+        <thead>
+          <tr>
+            <th>Sun</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="date-container bg-light text-muted" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-29" class="min-height" date='29/03/2020'>29</div>
+            </td>
+            <td class="date-container bg-light text-muted" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-30" class="min-height" date='30/03/2020'>30</div>
+            </td>
+            <td class="date-container bg-light text-muted" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-31" class="min-height" date='31/03/2020'>31</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-01" class="min-height" date='01/04/2020'>01</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-02" class="min-height" date='02/04/2020'>02</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-03" class="min-height" date='03/04/2020'>03</div>
+              <button type="button" class="title-name" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Description here
+              </button>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-04" class="min-height" date='04/04/2020'>04</div>
+              <button type="button" class="title-name" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Description here
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-05" class="sun min-height">05</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-06" class="min-height" date='06/04/2020'>
+                06<br />
+                <input type="text" class="input-name" placeholder="Edit here" />
+              </div>
+              <button type="button" class="title-name" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Description here
+              </button>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-07" class="min-height" date='07/04/2020'>07</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-08" class="min-height" date='08/04/2020'>08</div>
+              <button type="button" class="title-name" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Description here
+              </button>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-09" class="min-height" date='09/04/2020'>09</div>
+              <button type="button" class="title-name" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Description here
+              </button>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-10" class="min-height" date='10/04/2020'>10</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-11" class="min-height" date='
+ /04/2020'>
+                11<br />
+                <input type="text" class="input-name color1" placeholder="Edit here" />
+              </div>
+              <button type="button" class="title-name" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Description here
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div class="sun min-height">12</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-13" class="min-height" date='13/04/2020'>13</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-14" class="min-height" date='14/04/2020'>14</div>
+              <button type="button" class="title-name" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Description here
+              </button>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-15" class="min-height" date='15/04/2020'>15</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div class="d-flex">
+                <div id="apr-16" class="min-height" date='16/04/2020'>16</div>
+                <div class="edit">
+                  You can edit<br />
+                  this text here
+                </div>
+              </div>
+              <button type="button" class="title-name" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Description here
+              </button>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-17" class="min-height" date='17/04/2020'>17</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div class="d-flex">
+                <div id="apr-18" class="min-height" date='18/04/2020'>18</div>
+                <div class="edit code-color">
+                  You can edit<br />
+                  this text here
+                </div>
+              </div>
+              <button type="button" class="title-name" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Description here
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div class="sun min-height">19</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-20" class="min-height" date='20/04/2020'>20</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-21" class="min-height" date='21/04/2020'>21</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-22" class="min-height" date='
+ /04/2020'>
+                22<br />
+                <input type="text" class="input-name color2" placeholder="Edit here" />
+              </div>
+              <button type="button" class="title-name" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Description here
+              </button>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-23" class="min-height" date='23/04/2020'>23</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-24" class="min-height" date='
+ /04/2020'>
+                24<br />
+                <input type="text" class="input-name color3" placeholder="Edit here" />
+              </div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-25" class="min-height" date='25/04/2020'>25</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div class="sun min-height">26</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-27" class="min-height" date='27/04/2020'>27</div>
+              <button type="button" class="title-name" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Description here
+              </button>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-28" class="min-height" date='28/04/2020'>28</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-29" class="min-height" date='29/04/2020'>29</div>
+            </td>
+            <td class="date-container" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-30" class="min-height" date='30/04/2020'>30</div>
+            </td>
+            <td class="date-container bg-light text-muted" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-01" class="min-height" date='01/05/2020'>01</div>
+            </td>
+            <td class="date-container bg-light text-muted" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <div id="apr-02" class="min-height" date='02/05/2020'>02</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="script.js"> </script>
+
+</html>
