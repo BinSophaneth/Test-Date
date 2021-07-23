@@ -18,12 +18,25 @@ $("#myform").submit(function (event) {
       startdate.add(1, "days");
     }
   }
-  for (var i = 0; i < range.length; i++) {
-    console.log(range[i]);
-    $("div[date='" + range[i] + "']").append(
-      '<input type="text" class="input-name color1" placeholder="Edit here" />'
-    );
-  }
+  for (let i = 0; i < range.length; i++) {
+      let back = [
+        "#E82B00",
+        "#df7d5a",
+        "#EA1EFF",
+        "#484848",
+        "#A2DA74",
+        "#C097F2",
+        "#64d0da",
+        "#3281ac",
+      ];
+      let random = back[Math.floor(Math.random() * back.length)];
+      $("div[date='" + range[i] + "']").append(
+        $('<button type="text" class="input-name">Edit here</button>').css(
+          "background-color",
+          random
+        )
+      );
+    }
   // console.log(range[0]);
   // let tmpObj = {
   //   title: $("#inputTitle").val(),
