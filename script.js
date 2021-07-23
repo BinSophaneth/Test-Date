@@ -18,7 +18,7 @@ $("#myform").submit(function (event) {
       startdate.add(1, "days");
     }
   }
-   for (let i = 0; i < range.length; i++) {
+     for (let i = 0; i < range.length; i++) {
       let back = [
         "#E82B00",
         "#df7d5a",
@@ -31,43 +31,7 @@ $("#myform").submit(function (event) {
       ];
       let random = back[Math.floor(Math.random() * back.length)];
       let input = $("#inputTitle").val();
-      // $("div[date='" + range[i] + "']").append( for (let i = 0; i < range.length; i++) {
-22
-      let back = [
-23
-        "#E82B00",
-24
-        "#df7d5a",
-25
-        "#EA1EFF",
-26
-        "#484848",
-27
-        "#A2DA74",
-28
-        "#C097F2",
-29
-        "#64d0da",
-30
-        "#3281ac",
-31
-      ];
-32
-      let random = back[Math.floor(Math.random() * back.length)];
-33
-      $("div[date='" + range[i] + "']").append(
-34
-        $('<button type="text" class="input-name">Edit here</button>').css(
-35
-          "background-color",
-36
-          random
-37
-        )
-38
-      );
-39
-    }
+      // $("div[date='" + range[i] + "']").append(
       //   $('<button type="text" class="input-name"></button>').css(
       //     "background-color",
       //     random
@@ -79,6 +43,11 @@ $("#myform").submit(function (event) {
           .css("background-color", random)
       );
     }
+      //   $('<button type="text" class="input-name"></button>').css(
+      //     "background-color",
+      //     random
+      //   )
+      // );
   // console.log(range[0]);
   // let tmpObj = {
   //   title: $("#inputTitle").val(),
