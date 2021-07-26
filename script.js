@@ -118,3 +118,8 @@ function getId(btn) {
   $("#end-date").val(data.edate);
   isContainerClick = false;
 }
+ // else {
+    //   let obj = JSON.parse(data);
+    //   let objectLenght = Object.keys(obj).length;
+    //   console.log(objectLenght);
+    // }
