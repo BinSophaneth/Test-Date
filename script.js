@@ -1,5 +1,6 @@
 let currentDay = null;
 let isContainerClick = true;
+let currentId = null;
 $("#exampleModal").on("hidden.bs.modal", function () {
   $("#myform").trigger("reset");
 });
@@ -8,8 +9,6 @@ $("#myform").submit(function (event) {
   let startdate = moment($("#start-date").val(), "DD/MM/YYYY");
   let enddate = moment($("#end-date").val(), "DD/MM/YYYY");
   let countdate = enddate.diff(startdate, "days");
-  // console.log(enddate.diff(startdate, "days"));
-  // console.log(a.diff(b, 'days'));
   var range = [];
   if (startdate == enddate) {
     range.push(startdate.format("DD/MM/YYYY"));
@@ -19,62 +18,45 @@ $("#myform").submit(function (event) {
       startdate.add(1, "days");
     }
   }
-  let back = [
-    "#E82B00",
-    "#df7d5a",
-    "#EA1EFF",
-    "#484848",
-    "#A2DA74",
-    "#C097F2",
-    "#64d0da",
-    "#3281ac",
-  ];
-  let random = back[Math.floor(Math.random() * back.length)];
+  var letters = "0123456789ABCDEF";
+  var random = "#";
+  for (var i = 0; i < 6; i++) {
+    random += letters[Math.floor(Math.random() * 16)];
+  }
   for (let i = 0; i < range.length; i++) {
-    let input = $("#inputTitle").val();
+    let title = $("#inputTitle").val();
     // let data = sessionStorage.getItem(range[i]);
-    let key = range[i] + "-1";
+    // let key = range[i] + "-1";
+    let key = $(".dateid").length;
+    if (currentId !== null) {
+      key = currentId;
+    }
     let obj = {
-      title: $("#inputTitle").val(),
+      title,
       type: $("#inputGroupSelect").val(),
       reason: $("#message-text").val(),
       sdate: $("#start-date").val(),
       edate: $("#end-date").val(),
     };
-    $("div[date='" + range[i] + "']").append(
-      $(
-        '<button id="' +
-          key +
-          '"  type="text" class="input-name" onclick="getId(this)" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>'
-      )
-        .html(input)
-        .css("background-color", random)
-    );
+    console.log(currentId, isContainerClick);
+    if (currentId == null || isContainerClick) {
+      $("div[date='" + range[i] + "']").append(
+        $(
+          '<button id="' +
+            key +
+            '"  type="text" class="input-name dateid" onclick="getId(this)" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>'
+        )
+          .html(title)
+          .css("background-color", random)
+      );
+    } else {
+      $("#" + currentId).text(title);
+    }
     sessionStorage.setItem(key, JSON.stringify(obj));
-    // console.log(key);
-    // else {
-    //   let obj = JSON.parse(data);
-    //   let objectLenght = Object.keys(obj).length;
-    //   console.log(objectLenght);
-    // }
-
-    // $("div[date='" + range[i] + "']").append(
-    //   $('<button type="text" class="input-name"></button>').css(
-    //     "background-color",
-    //     random
-    //   )
-    // );
+    currentId = null;
+    isContainerClick = true;
   }
-  // console.log(range[0]);
-  // let tmpObj = {
-  //   title: $("#inputTitle").val(),
-  //   type: $("#inputGroupSelect").val(),
-  //   reason: $("#message-text").val(),
-  //   date: $("#input-date").val(),
-  // };
-  // sessionStorage.setItem("29/03/2020", JSON.stringify(tmpObj));
 });
-// sessionStorage.setItem('lastname','Smith');
 $(".date-container").click(function () {
   let passedID = $(this).children(0).attr("id");
   if (isContainerClick == true) {
@@ -83,7 +65,7 @@ $(".date-container").click(function () {
     let endDate = $(this).children(0).attr("date");
     $("#end-date").val(endDate);
   }
-  isContainerClick = true;
+
   $('input[name="daterange"]').daterangepicker({
     locale: {
       format: "DD/MM/YYYY",
@@ -99,17 +81,10 @@ $(".date-container").click(function () {
   });
 
   currentDay = passedID;
-  // let data = sessionStorage.getItem("29/03/2020");
-  // if (data !== null) {
-  //   data = JSON.parse(data);
-  //   $("#inputTitle").val(data.title);
-  //   $("#inputGroupSelect").val(data.type);
-  //   $("#message-text").val(data.reason);
-  //   $("#input-date").val(data.date);
-  // }
 });
 function getId(btn) {
   let data = sessionStorage.getItem(btn.id);
+  currentId = btn.id;
   data = JSON.parse(data);
   $("#inputTitle").val(data.title);
   $("#inputGroupSelect").val(data.type);
@@ -118,8 +93,7 @@ function getId(btn) {
   $("#end-date").val(data.edate);
   isContainerClick = false;
 }
- // else {
-    //   let obj = JSON.parse(data);
-    //   let objectLenght = Object.keys(obj).length;
-    //   console.log(objectLenght);
-    // }
+$("#close").click(function () {
+  isContainerClick = true;
+});
+
