@@ -1,13 +1,23 @@
-let currentDay = null;
-let isContainerClick = true;
+let eventCounter = sessionStorage.getItem("eventCounter");
+if (!eventCounter) {
+  eventCounter = 0;
+}
+let events = JSON.parse(sessionStorage.getItem("events"));
+if (!events) {
+  events = [];
+}
+for (i = 0; i < events.length; i++) {
+  renderEvent(events[i]);
+}
+// let currentDay = null;
+// let isContainerClick = true;
 let currentId = null;
 $("#exampleModal").on("hidden.bs.modal", function () {
   $("#myform").trigger("reset");
 });
-$("#myform").submit(function (event) {
-  event.preventDefault();
-  let startdate = moment($("#start-date").val(), "DD/MM/YYYY");
-  let enddate = moment($("#end-date").val(), "DD/MM/YYYY");
+function renderEvent(event) {
+  let startdate = moment(event.sdate, "DD/MM/YYYY");
+  let enddate = moment(event.edate, "DD/MM/YYYY");
   let countdate = enddate.diff(startdate, "days");
   var range = [];
   if (startdate == enddate) {
@@ -18,54 +28,62 @@ $("#myform").submit(function (event) {
       startdate.add(1, "days");
     }
   }
+
+  for (i = 0; i < range.length; i++) {
+    $("div[date='" + range[i] + "']").append(
+      $(
+        '<button type="text" class="input-name event-' +
+          event.eventId +
+          '" onclick="editEvent(' +
+          event.eventId +
+          ', event)"></button>'
+      )
+        .html(event.title)
+        .css("background-color", event.color)
+    );
+  }
+}
+$("#myform").submit(function (e) {
+  e.preventDefault();
+  let eventId = $("input[name='eventId']").val();
+  console.log("1", eventId);
   var letters = "0123456789ABCDEF";
   var random = "#";
   for (var i = 0; i < 6; i++) {
     random += letters[Math.floor(Math.random() * 16)];
   }
-  for (let i = 0; i < range.length; i++) {
-    let title = $("#inputTitle").val();
-    // let data = sessionStorage.getItem(range[i]);
-    // let key = range[i] + "-1";
-    let key = $(".dateid").length;
-    if (currentId !== null) {
-      key = currentId;
-    }
-    let obj = {
-      title,
+  console.log(events);
+  // let existEvent = events.find((event) => event.eventId == eventId);
+  if (eventId == "") {
+    let event = {
+      eventId: ++eventCounter,
+      title: $("#inputTitle").val(),
       type: $("#inputGroupSelect").val(),
       reason: $("#message-text").val(),
       sdate: $("#start-date").val(),
       edate: $("#end-date").val(),
+      color: random,
     };
-    console.log(currentId, isContainerClick);
-    if (currentId == null || isContainerClick) {
-      $("div[date='" + range[i] + "']").append(
-        $(
-          '<button id="' +
-            key +
-            '"  type="text" class="input-name dateid" onclick="getId(this)" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>'
-        )
-          .html(title)
-          .css("background-color", random)
-      );
-    } else {
-      $("#" + currentId).text(title);
-    }
-    sessionStorage.setItem(key, JSON.stringify(obj));
-    currentId = null;
-    isContainerClick = true;
+    events.push(event);
+    renderEvent(event);
+  } else {
+    let objIndex = events.findIndex((obj) => obj.eventId == eventId);
+    events[objIndex].title = $("#inputTitle").val();
+    events[objIndex].type = $("#inputGroupSelect").val();
+    events[objIndex].reason = $("#message-text").val();
+    events[objIndex].sdate = $("#start-date").val();
+    events[objIndex].edate = $("#end-date").val();
+    $(".event-" + eventId).html($("#inputTitle").val());
   }
+  sessionStorage.setItem("events", JSON.stringify(events));
+  sessionStorage.setItem("eventCounter", eventCounter);
 });
 $(".date-container").click(function () {
-  let passedID = $(this).children(0).attr("id");
-  if (isContainerClick == true) {
-    let startDate = $(this).children(0).attr("date");
-    $("#start-date").val(startDate);
-    let endDate = $(this).children(0).attr("date");
-    $("#end-date").val(endDate);
-  }
-
+  $("input[name='eventId']").val("");
+  let startDate = $(this).children(0).attr("date");
+  $("#start-date").val(startDate);
+  let endDate = $(this).children(0).attr("date");
+  $("#end-date").val(endDate);
   $('input[name="daterange"]').daterangepicker({
     locale: {
       format: "DD/MM/YYYY",
@@ -79,21 +97,16 @@ $(".date-container").click(function () {
   $('input[id="end-date"]').on("cancel.daterangepicker", function (ev, picker) {
     $(this).val("");
   });
-
-  currentDay = passedID;
 });
-function getId(btn) {
-  let data = sessionStorage.getItem(btn.id);
-  currentId = btn.id;
-  data = JSON.parse(data);
-  $("#inputTitle").val(data.title);
-  $("#inputGroupSelect").val(data.type);
-  $("#message-text").val(data.reason);
-  $("#start-date").val(data.sdate);
-  $("#end-date").val(data.edate);
-  isContainerClick = false;
+function editEvent(eventId, e) {
+  e.stopPropagation();
+  let event = events.find((event) => event.eventId == eventId);
+  console.log($("input[name='eventId']").val());
+  $("input[name='eventId']").val(eventId);
+  $("#inputTitle").val(event.title);
+  $("#inputGroupSelect").val(event.type);
+  $("#message-text").val(event.reason);
+  $("#start-date").val(event.sdate);
+  $("#end-date").val(event.edate);
 }
-$("#close").click(function () {
-  isContainerClick = true;
-});
 
