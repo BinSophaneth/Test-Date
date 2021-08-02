@@ -73,7 +73,9 @@ $("#myform").submit(function (e) {
     events[objIndex].reason = $("#message-text").val();
     events[objIndex].sdate = $("#start-date").val();
     events[objIndex].edate = $("#end-date").val();
-    $(".event-" + eventId).html($("#inputTitle").val());
+//     $(".event-" + eventId).html($("#inputTitle").val());
+    $(".event-" + eventId).remove();
+    renderEvent(events[objIndex]);
   }
   sessionStorage.setItem("events", JSON.stringify(events));
   sessionStorage.setItem("eventCounter", eventCounter);
