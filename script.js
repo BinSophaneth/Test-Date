@@ -111,4 +111,23 @@ function editEvent(eventId, e) {
   $("#start-date").val(event.sdate);
   $("#end-date").val(event.edate);
 }
-
+for (i = 0; i < range.length; i++) {
+    var tmpTag = $(
+      '<button type="text" class="input-name event-' +
+        event.eventId +
+        '" onclick="editEvent(' +
+        event.eventId +
+        ', event)"></button>'
+    );
+    if (i < range.length - 1 && i > 0) {
+      tmpTag.addClass("width");
+    }
+    if (range.length == 2 && i == 0) {
+      tmpTag.addClass("width-1");
+    }
+    $("div[date='" + range[i] + "']").append(
+      tmpTag
+        .html("Title:" + " " + event.title + "<br />" + "Time:" + startHour)
+        .css("background-color", event.color)
+    );
+  }
