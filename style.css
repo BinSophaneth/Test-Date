@@ -123,3 +123,10 @@ button.btn.btn-secondary {
 input#end-date {
   margin-left: 10px;
 }
+.width {
+  width: 160%;
+  left: -25px;
+}
+.width-1 {
+  width: 160%;
+}
