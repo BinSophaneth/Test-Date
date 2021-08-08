@@ -131,3 +131,18 @@ for (i = 0; i < range.length; i++) {
         .css("background-color", event.color)
     );
   }
+  if (i == 0) {
+      tmpTag.html(
+        "Title:" +
+          " " +
+          event.title +
+          "<br />" +
+          "Time:" +
+          startHour +
+          "-" +
+          endHour
+      );
+    }
+    if (i == range.length - 1 && range.length > 1) {
+      tmpTag.addClass("width-3");
+    }
