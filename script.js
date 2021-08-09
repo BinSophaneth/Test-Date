@@ -112,6 +112,7 @@ function editEvent(eventId, e) {
   $("#end-date").val(event.edate);
 }
 for (i = 0; i < range.length; i++) {
+    var checkSunday = moment(range[i], "DD/MM/YYYY").format("ddd");
     var tmpTag = $(
       '<button type="text" class="input-name event-' +
         event.eventId +
@@ -119,30 +120,24 @@ for (i = 0; i < range.length; i++) {
         event.eventId +
         ', event)"></button>'
     );
-    if (i < range.length - 1 && i > 0) {
+    if (i < range.length - 1 && i > 0 && checkSunday !== "Sun") {
       tmpTag.addClass("width");
     }
-    if (range.length == 2 && i == 0) {
-      tmpTag.addClass("width-1");
+    if (i == 0 || checkSunday === "Sun") {
+      if (range.length == 1) {
+        tmpTag.addClass("one-day");
+      } else {
+        tmpTag.addClass("first-day");
+      }
+      tmpTag.html("Title:" + " " + event.title);
     }
+
+    if (i == range.length - 1 && range.length > 1) {
+      tmpTag.addClass("last-day");
+    }
+
     $("div[date='" + range[i] + "']").append(
-      tmpTag
-        .html("Title:" + " " + event.title + "<br />" + "Time:" + startHour)
-        .css("background-color", event.color)
+      tmpTag.css("background-color", event.color)
     );
   }
-  if (i == 0) {
-      tmpTag.html(
-        "Title:" +
-          " " +
-          event.title +
-          "<br />" +
-          "Time:" +
-          startHour +
-          "-" +
-          endHour
-      );
-    }
-    if (i == range.length - 1 && range.length > 1) {
-      tmpTag.addClass("width-3");
-    }
+}
