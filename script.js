@@ -141,3 +141,17 @@ for (i = 0; i < range.length; i++) {
     );
   }
 }
+  const buttonLength = $("div[date='" + range[i] + "']").children().length;
+    var ButtonEvents = [];
+    for (var i = 0; i < buttonLength; i++) {
+      var tmpArr = $("div[date='" + range[i] + "']")
+        .children()
+        .eq(0)
+        .attr("class");
+      console.log({ tmpArr });
+      if (tmpArr != undefined) {
+        tmpArr.split(" ").filter((O) => O.includes("event"));
+        ButtonEvents.concat(tmpArr);
+      }
+    }
+    console.log({ buttonLength });
