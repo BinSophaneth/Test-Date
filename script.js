@@ -141,17 +141,84 @@ for (i = 0; i < range.length; i++) {
     );
   }
 }
-  const buttonLength = $("div[date='" + range[i] + "']").children().length;
+for (i = 0; i < range.length; i++) {
+    // console.log("aa", range.length);
+
+    const buttonLength = $("div[date='" + range[i] + "']").children().length;
     var ButtonEvents = [];
-    for (var i = 0; i < buttonLength; i++) {
-      var tmpArr = $("div[date='" + range[i] + "']")
+    console.log({ buttonLength });
+    for (var k = 0; k < buttonLength; k++) {
+      var tmp = $("div[date='" + range[i] + "']")
         .children()
-        .eq(0)
+        .eq(k)
         .attr("class");
-      console.log({ tmpArr });
-      if (tmpArr != undefined) {
-        tmpArr.split(" ").filter((O) => O.includes("event"));
-        ButtonEvents.concat(tmpArr);
+      if (tmp != undefined) {
+        var tmpArr = tmp.split(" ").filter((O) => O.includes("event"));
+        console.log({ tmpArr });
+        ButtonEvents = ButtonEvents.concat(tmpArr);
+        console.log({ ButtonEvents });
       }
     }
-    console.log({ buttonLength });
+    // console.log({ ButtonEvents });
+    // let countClass = $(".event-" + event.eventId).length;
+    // console.log("a", countClass.attr("class"));
+    let checkSunday = moment(range[i], "DD/MM/YYYY").format("ddd");
+    let btntag = $(
+      '<button type="button" class="btn-title event-' +
+        event.eventId +
+        '" onclick="editEvent(' +
+        event.eventId +
+        ', event)"></button>'
+    );
+    // let rangeId = range.find((event) => event.eventId == eventId);
+    // console.log(rangeId);
+    // if (rangeId !== "") {
+    //   console.log(btntag);
+    // }
+    if (i < range.length - 1 && i > 0) {
+      btntag.addClass("mid-day");
+    }
+    if (i == 0 || checkSunday == "Sun") {
+      if (range.length == 1) {
+        btntag.addClass("one-day");
+      } else {
+        btntag.addClass("first-day");
+      }
+      btntag.html(
+        "Title:" +
+          " " +
+          event.title +
+          "<br />" +
+          "Time:" +
+          " " +
+          event.shour +
+          " - " +
+          event.ehour
+      );
+    }
+    if (i == range.length - 1 && i > 1) {
+      btntag.addClass("last-day");
+    }
+    if (range.length == 2 && i == 1) {
+      btntag.addClass("second-day");
+    }
+    // if (checkSunday == "Sun") {
+    //   btntag.html("Title:" + " " + event.title);
+    // }
+    console.log({ ButtonEvents });
+    if (ButtonEvents.length > 0) {
+      for (var j = 0; j < ButtonEvents.length; j++) {
+        const classEventName = ButtonEvents[j - 1];
+        console.log("aaaa", $("." + classEventName).length, range.length);
+        if ($("." + classEventName).length < range.length) {
+          $("div[date='" + range[i] + "']>button:eq(" + j + ")").after(
+            btntag.css("background-color", event.color)
+          );
+        }
+      }
+    } else {
+      $("div[date='" + range[i] + "']").append(
+        btntag.css("background-color", event.color)
+      );
+    }
+  }
