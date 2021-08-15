@@ -6,82 +6,141 @@ let events = JSON.parse(sessionStorage.getItem("events"));
 if (!events) {
   events = [];
 }
-for (i = 0; i < events.length; i++) {
+for (let i = 0; i < events.length; i++) {
   renderEvent(events[i]);
 }
-// let currentDay = null;
-// let isContainerClick = true;
-let currentId = null;
 $("#exampleModal").on("hidden.bs.modal", function () {
   $("#myform").trigger("reset");
 });
 function renderEvent(event) {
-  let startdate = moment(event.sdate, "DD/MM/YYYY");
-  let enddate = moment(event.edate, "DD/MM/YYYY");
-  let countdate = enddate.diff(startdate, "days");
-  var range = [];
-  if (startdate == enddate) {
-    range.push(startdate.format("DD/MM/YYYY"));
-  } else {
-    for (var i = 0; i < countdate + 1; i++) {
-      range.push(startdate.format("DD/MM/YYYY"));
-      startdate.add(1, "days");
-    }
+  let startDate = moment(event.sdate, "DD/MM/YYYY");
+  let endDate = moment(event.edate, "DD/MM/YYYY");
+  let countdate = endDate.diff(startDate, "days");
+  let range = [];
+  for (let i = 0; i < countdate + 1; i++) {
+    range.push(startDate.format("DD/MM/YYYY"));
+    startDate.add(1, "days");
   }
 
   for (i = 0; i < range.length; i++) {
-    $("div[date='" + range[i] + "']").append(
-      $(
-        '<button type="text" class="input-name event-' +
-          event.eventId +
-          '" onclick="editEvent(' +
-          event.eventId +
-          ', event)"></button>'
-      )
-        .html(event.title)
-        .css("background-color", event.color)
+    const buttonLength = $("div[date='" + range[i] + "']").children().length;
+    var ButtonEvents = [];
+    for (var k = 0; k < buttonLength; k++) {
+      var tmp = $("div[date='" + range[i] + "']")
+        .children()
+        .eq(k)
+        .attr("class");
+      if (tmp != undefined) {
+        var tmpArr = tmp.split(" ").filter((O) => O.includes("event"));
+        ButtonEvents = ButtonEvents.concat(tmpArr);
+      }
+    }
+    let checkSunday = moment(range[i], "DD/MM/YYYY").format("ddd");
+    let btnApp = $(
+      '<button type="button" class="btn-title event-' +
+        event.eventId +
+        '" onclick="editEvent(' +
+        event.eventId +
+        ', event)"></button>'
     );
+    if (i < range.length - 1 && i > 0) {
+      btnApp.addClass("mid-day");
+    }
+    if (i == 0 || checkSunday == "Sun") {
+      if (range.length == 1) {
+        btnApp.addClass("one-day");
+      } else {
+        btnApp.addClass("first-day");
+      }
+      btnApp.html(
+        "Title:" +
+          " " +
+          event.title +
+          "<br />" +
+          "Time:" +
+          " " +
+          event.shour +
+          " - " +
+          event.ehour
+      );
+    }
+    if (i == range.length - 1 && i > 1) {
+      btnApp.addClass("last-day");
+    }
+    if (range.length == 2 && i == 1) {
+      btnApp.addClass("second-day");
+    }
+    if (ButtonEvents.length > 0) {
+      for (var j = 0; j < ButtonEvents.length; j++) {
+        const btnRange = $("div[date='" + range[i] + "']>button:eq(" + j + ")");
+        const classEventName = ButtonEvents[j];
+        if ($("." + classEventName).length < range.length) {
+          btnRange.before(btnApp.css("background-color", event.color));
+          break;
+        } else if (j === ButtonEvents.length - 1) {
+          if ($("." + classEventName).length === range.length) {
+            const sDate1Arr = ButtonEvents[j].split("-");
+            const sDate1 = moment(
+              events[Number(sDate1Arr[1]) - 1].sdate,
+              "DD/MM/YYYY"
+            );
+            const sDate2 = moment(event.sdate, "DD/MM/YYYY");
+            if (sDate1.isSameOrBefore(sDate2)) {
+              btnRange.after(btnApp.css("background-color", event.color));
+            } else {
+              btnRange.before(btnApp.css("background-color", event.color));
+            }
+          } else {
+            btnRange.after(btnApp.css("background-color", event.color));
+          }
+        }
+      }
+    } else {
+      $("div[date='" + range[i] + "']").append(
+        btnApp.css("background-color", event.color)
+      );
+    }
   }
 }
 $("#myform").submit(function (e) {
   e.preventDefault();
-  let eventId = $("input[name='eventId']").val();
-  console.log("1", eventId);
-  var letters = "0123456789ABCDEF";
-  var random = "#";
-  for (var i = 0; i < 6; i++) {
+  let letters = "0123456789ABCDEF";
+  let random = "#";
+  for (let i = 0; i < 6; i++) {
     random += letters[Math.floor(Math.random() * 16)];
   }
-  console.log(events);
-  // let existEvent = events.find((event) => event.eventId == eventId);
-  if (eventId == "") {
+  let updateEvent = $("#updateEvent").val();
+  if (updateEvent == "") {
     let event = {
       eventId: ++eventCounter,
       title: $("#inputTitle").val(),
       type: $("#inputGroupSelect").val(),
       reason: $("#message-text").val(),
       sdate: $("#start-date").val(),
+      shour: $("#start-hour").val(),
       edate: $("#end-date").val(),
+      ehour: $("#end-hour").val(),
       color: random,
     };
     events.push(event);
     renderEvent(event);
   } else {
-    let objIndex = events.findIndex((obj) => obj.eventId == eventId);
+    let objIndex = events.findIndex((obj) => obj.eventId == updateEvent);
     events[objIndex].title = $("#inputTitle").val();
     events[objIndex].type = $("#inputGroupSelect").val();
     events[objIndex].reason = $("#message-text").val();
     events[objIndex].sdate = $("#start-date").val();
+    events[objIndex].shour = $("#start-hour").val();
     events[objIndex].edate = $("#end-date").val();
-//     $(".event-" + eventId).html($("#inputTitle").val());
-    $(".event-" + eventId).remove();
+    events[objIndex].ehour = $("#end-hour").val();
+    $(".event-" + updateEvent).remove();
     renderEvent(events[objIndex]);
   }
   sessionStorage.setItem("events", JSON.stringify(events));
   sessionStorage.setItem("eventCounter", eventCounter);
 });
 $(".date-container").click(function () {
-  $("input[name='eventId']").val("");
+  $("#updateEvent").val("");
   let startDate = $(this).children(0).attr("date");
   $("#start-date").val(startDate);
   let endDate = $(this).children(0).attr("date");
@@ -96,129 +155,53 @@ $(".date-container").click(function () {
     minDate: "29/03/2020",
     maxDate: "02/05/2020",
   });
-  $('input[id="end-date"]').on("cancel.daterangepicker", function (ev, picker) {
+  $('input[name="datetimes"]').daterangepicker({
+    singleDatePicker: true,
+    autoUpdateInput: true,
+    timePicker: true,
+    timePickerSeconds: true,
+    timePicker24Hour: true,
+    locale: {
+      format: "HH:mm a",
+    },
+  });
+  $('input[name="daterange"]').on("cancel.daterangepicker", function () {
     $(this).val("");
   });
 });
 function editEvent(eventId, e) {
   e.stopPropagation();
   let event = events.find((event) => event.eventId == eventId);
-  console.log($("input[name='eventId']").val());
-  $("input[name='eventId']").val(eventId);
+  $("#updateEvent").val(eventId);
   $("#inputTitle").val(event.title);
   $("#inputGroupSelect").val(event.type);
   $("#message-text").val(event.reason);
   $("#start-date").val(event.sdate);
+  $("#start-hour").val(event.shour);
   $("#end-date").val(event.edate);
+  $("#end-hour").val(event.ehour);
+  $('input[name="daterange"]').daterangepicker({
+    locale: {
+      format: "DD/MM/YYYY",
+      cancelLabel: "Clear",
+    },
+    singleDatePicker: true,
+    autoUpdateInput: true,
+    minDate: "29/03/2020",
+    maxDate: "02/05/2020",
+  });
+  $('input[name="datetimes"]').daterangepicker({
+    singleDatePicker: true,
+    autoUpdateInput: true,
+    timePicker: true,
+    timePickerSeconds: true,
+    timePicker24Hour: true,
+    locale: {
+      format: "HH:mm a",
+    },
+  });
+  $('input[name="daterange"]').on("cancel.daterangepicker", function () {
+    $(this).val("");
+  });
 }
-for (i = 0; i < range.length; i++) {
-    var checkSunday = moment(range[i], "DD/MM/YYYY").format("ddd");
-    var tmpTag = $(
-      '<button type="text" class="input-name event-' +
-        event.eventId +
-        '" onclick="editEvent(' +
-        event.eventId +
-        ', event)"></button>'
-    );
-    if (i < range.length - 1 && i > 0 && checkSunday !== "Sun") {
-      tmpTag.addClass("width");
-    }
-    if (i == 0 || checkSunday === "Sun") {
-      if (range.length == 1) {
-        tmpTag.addClass("one-day");
-      } else {
-        tmpTag.addClass("first-day");
-      }
-      tmpTag.html("Title:" + " " + event.title);
-    }
 
-    if (i == range.length - 1 && range.length > 1) {
-      tmpTag.addClass("last-day");
-    }
-
-    $("div[date='" + range[i] + "']").append(
-      tmpTag.css("background-color", event.color)
-    );
-  }
-}
-for (i = 0; i < range.length; i++) {
-    // console.log("aa", range.length);
-
-    const buttonLength = $("div[date='" + range[i] + "']").children().length;
-    var ButtonEvents = [];
-    console.log({ buttonLength });
-    for (var k = 0; k < buttonLength; k++) {
-      var tmp = $("div[date='" + range[i] + "']")
-        .children()
-        .eq(k)
-        .attr("class");
-      if (tmp != undefined) {
-        var tmpArr = tmp.split(" ").filter((O) => O.includes("event"));
-        console.log({ tmpArr });
-        ButtonEvents = ButtonEvents.concat(tmpArr);
-        console.log({ ButtonEvents });
-      }
-    }
-    // console.log({ ButtonEvents });
-    // let countClass = $(".event-" + event.eventId).length;
-    // console.log("a", countClass.attr("class"));
-    let checkSunday = moment(range[i], "DD/MM/YYYY").format("ddd");
-    let btntag = $(
-      '<button type="button" class="btn-title event-' +
-        event.eventId +
-        '" onclick="editEvent(' +
-        event.eventId +
-        ', event)"></button>'
-    );
-    // let rangeId = range.find((event) => event.eventId == eventId);
-    // console.log(rangeId);
-    // if (rangeId !== "") {
-    //   console.log(btntag);
-    // }
-    if (i < range.length - 1 && i > 0) {
-      btntag.addClass("mid-day");
-    }
-    if (i == 0 || checkSunday == "Sun") {
-      if (range.length == 1) {
-        btntag.addClass("one-day");
-      } else {
-        btntag.addClass("first-day");
-      }
-      btntag.html(
-        "Title:" +
-          " " +
-          event.title +
-          "<br />" +
-          "Time:" +
-          " " +
-          event.shour +
-          " - " +
-          event.ehour
-      );
-    }
-    if (i == range.length - 1 && i > 1) {
-      btntag.addClass("last-day");
-    }
-    if (range.length == 2 && i == 1) {
-      btntag.addClass("second-day");
-    }
-    // if (checkSunday == "Sun") {
-    //   btntag.html("Title:" + " " + event.title);
-    // }
-    console.log({ ButtonEvents });
-    if (ButtonEvents.length > 0) {
-      for (var j = 0; j < ButtonEvents.length; j++) {
-        const classEventName = ButtonEvents[j - 1];
-        console.log("aaaa", $("." + classEventName).length, range.length);
-        if ($("." + classEventName).length < range.length) {
-          $("div[date='" + range[i] + "']>button:eq(" + j + ")").after(
-            btntag.css("background-color", event.color)
-          );
-        }
-      }
-    } else {
-      $("div[date='" + range[i] + "']").append(
-        btntag.css("background-color", event.color)
-      );
-    }
-  }
