@@ -2,20 +2,11 @@
 body {
   font-family: "Roboto", sans-serif;
 }
-/* .container {
-  background-color: #f8f9fa;
-  padding: 25px 15px 25px 55px;
-  margin-top: 45px;
-} */
-/* .content {
-  background-color: white;
-} */
 .date-container {
   font-weight: bold;
 }
 .min-height {
-  min-height: 125px;
-  flex: 0 1 35%;
+  min-height: 135px;
 }
 thead {
   background-color: #92d14f;
@@ -32,7 +23,7 @@ h2 {
 td,
 th {
   text-align: center;
-  min-width: 180px;
+  min-width: 185px;
 }
 td {
   text-align: left;
@@ -41,67 +32,38 @@ td {
 .sunday {
   color: #eb8e7a;
 }
-/* .title-name {
-  font-size: 12px;
-  position: relative;
-  bottom: 72px;
-} */
 .btn-title {
   position: relative;
   display: block;
   height: 40px;
   white-space: nowrap;
+  text-align: center;
   margin-bottom: 4px;
   border: 0px solid #fff;
   border-radius: 3px;
   font-size: 13px;
-  text-align: left;
   color: #fff;
   font-weight: bold;
+  background-color: #000;
 }
-td.date-container {
+/* td.date-container {
   width: 0px;
-}
-/* .color1 {
-  background-color: #3281ac;.title-name {
-  font-size: 12px;
-  position: relative;
-  bottom: 72px;
-}
-}
-.color2 {
-  background-color: #64d0da;
-  border: 1px solid #64d0da;
-}
-.color3 {
-  background-color: #92d14f;
-  border: 1px solid #92d14f;
 } */
-.edit {
-  font-size: 11px;
-  color: #3281ac;
-  margin-top: -3px;
-  font-weight: 500;
-}
-.code-color {
-  color: #8faadc;
-}
-button.title-name {
-  border: none;
-  background-color: transparent;
-  left: -6px;
-}
 label.input-group-type {
   margin-top: 7px;
 }
 input#inputTitle {
-  margin-left: 22px;
+  margin-left: 34px;
+}
+input#colorPick {
+  cursor: pointer;
+  margin: 7px 0 0 -45px;
 }
 select#inputGroupSelect {
-  margin-left: 18px;
+  margin-left: 31px;
 }
 textarea#message-text {
-  margin-left: -1px;
+  margin-left: 12px;
 }
 .modal-footer {
   border-top: none;
@@ -130,16 +92,16 @@ input#end-date {
   margin-left: 5px;
 }
 input#start-hour {
-  margin-left: 5px;
+  margin-left: 30px;
 }
 input#end-hour {
-  margin-left: 5px;
+  margin-left: 30px;
 }
 form#myform {
   margin-left: 45px;
 }
 .mid-day {
-  width: 120%;
+  width: 115%;
   left: -10px;
 }
 table.table.table-borderless {
@@ -149,13 +111,30 @@ table.table.table-borderless {
   width: 100%;
 }
 .first-day {
-  width: 115%;
+  width: 107%;
+  text-align: left;
 }
 .last-day {
   width: 106%;
   left: -10px;
 }
 .second-day {
-  width: 112%;
-  left: -20px;
+  width: 106%;
+  left: -10px;
+}
+.daterangepicker.show-calendar .drp-buttons {
+  display: none;
+}
+.drp-calendar.left.single {
+  margin-bottom: 10px;
+}
+img.colorpick-eyedropper-input-trigger {
+  display: none;
+}
+.hide {
+  display: none;
+}
+.drp-calendar.left.single {
+  margin-right: 5px;
+  margin-left: 5px;
 }

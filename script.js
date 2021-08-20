@@ -16,16 +16,28 @@ function renderEvent(event) {
   let startDate = moment(event.sdate, "DD/MM/YYYY");
   let endDate = moment(event.edate, "DD/MM/YYYY");
   let countdate = endDate.diff(startDate, "days");
+  let count = 17;
+  let resultTitle =
+    event.title.slice(0, count) + (event.title.length > count ? "..." : "");
   let range = [];
   for (let i = 0; i < countdate + 1; i++) {
     range.push(startDate.format("DD/MM/YYYY"));
     startDate.add(1, "days");
   }
-
   for (i = 0; i < range.length; i++) {
-    // console.log("a", $(".event-" + event.eventId).length);
-    let countClass = $(".event-" + event.eventId).length;
-    let checkSunday = moment(range[i], "DD/MM/YYYY").format("ddd");
+    const buttonLength = $("div[date='" + range[i] + "']").children().length;
+    let ButtonEvents = [];
+    for (let k = 0; k < buttonLength; k++) {
+      let tmp = $("div[date='" + range[i] + "']")
+        .children()
+        .eq(k)
+        .attr("class");
+      if (tmp !== undefined) {
+        let tmpArr = tmp.split(" ").filter((O) => O.includes("event"));
+        ButtonEvents = ButtonEvents.concat(tmpArr);
+      }
+    }
+    // let checkSunday = moment(range[i], "DD/MM/YYYY").format("ddd");
     let btntag = $(
       '<button type="button" class="btn-title event-' +
         event.eventId +
@@ -33,14 +45,13 @@ function renderEvent(event) {
         event.eventId +
         ', event)"></button>'
     );
-    // if () {
-    //   console.log("1", btntag.prepend());
-    //   btntag.prepend();
-    // }
+    const btns = $("div[date='" + range[i] + "']>button:eq(1)");
+    btns.after('<div class="show-more"> More </div>');
+    // btns.addClass("hide");
     if (i < range.length - 1 && i > 0) {
       btntag.addClass("mid-day");
     }
-    if (i == 0 || checkSunday == "Sun") {
+    if (i == 0) {
       if (range.length == 1) {
         btntag.addClass("one-day");
       } else {
@@ -49,7 +60,7 @@ function renderEvent(event) {
       btntag.html(
         "Title:" +
           " " +
-          event.title +
+          resultTitle +
           "<br />" +
           "Time:" +
           " " +
@@ -64,18 +75,43 @@ function renderEvent(event) {
     if (range.length == 2 && i == 1) {
       btntag.addClass("second-day");
     }
-    $("div[date='" + range[i] + "']").append(
-      btntag.css("background-color", event.color)
-    );
+    if (ButtonEvents.length > 0) {
+      for (var j = 0; j < ButtonEvents.length; j++) {
+        const btnRange = $("div[date='" + range[i] + "']>button:eq(" + j + ")");
+        const classEventName = ButtonEvents[j];
+        const sDate1Arr = ButtonEvents[j].split("-");
+        let id1 = events[Number(sDate1Arr[1]) - 1].eventId;
+        let id2 = event.eventId;
+        let sDate1 = moment(
+          events[Number(sDate1Arr[1]) - 1].sdate,
+          "DD/MM/YYYY"
+        );
+        let sDate2 = moment(event.sdate, "DD/MM/YYYY");
+        if ($("." + classEventName).length < range.length) {
+          btnRange.before(btntag.css("background-color", event.color));
+          break;
+        } else if (j == ButtonEvents.length - 1) {
+          if ($("." + classEventName).length === range.length) {
+            if (sDate1.isSameOrBefore(sDate2) && id1 < id2) {
+              btnRange.after(btntag.css("background-color", event.color));
+            } else {
+              btnRange.before(btntag.css("background-color", event.color));
+            }
+          } else {
+            btnRange.after(btntag.css("background-color", event.color));
+          }
+        }
+      }
+    } else {
+      $("div[date='" + range[i] + "']").append(
+        btntag.css("background-color", event.color)
+      );
+    }
   }
 }
+
 $("#myform").submit(function (e) {
   e.preventDefault();
-  let letters = "0123456789ABCDEF";
-  let random = "#";
-  for (let i = 0; i < 6; i++) {
-    random += letters[Math.floor(Math.random() * 16)];
-  }
   let updateEvent = $("#updateEvent").val();
   if (updateEvent == "") {
     let event = {
@@ -87,7 +123,7 @@ $("#myform").submit(function (e) {
       shour: $("#start-hour").val(),
       edate: $("#end-date").val(),
       ehour: $("#end-hour").val(),
-      color: random,
+      color: $("#colorPick").val(),
     };
     events.push(event);
     renderEvent(event);
@@ -100,6 +136,7 @@ $("#myform").submit(function (e) {
     events[objIndex].shour = $("#start-hour").val();
     events[objIndex].edate = $("#end-date").val();
     events[objIndex].ehour = $("#end-hour").val();
+    events[objIndex].color = $("#colorPick").val();
     $(".event-" + updateEvent).remove();
     renderEvent(events[objIndex]);
   }
@@ -122,19 +159,21 @@ $(".date-container").click(function () {
     minDate: "29/03/2020",
     maxDate: "02/05/2020",
   });
-  $('input[name="datetimes"]').daterangepicker({
-    singleDatePicker: true,
-    autoUpdateInput: true,
-    timePicker: true,
-    timePickerSeconds: true,
-    timePicker24Hour: true,
-    locale: {
-      format: "HH:mm a",
-    },
-  });
   $('input[name="daterange"]').on("cancel.daterangepicker", function () {
     $(this).val("");
   });
+  $('input[name="timepicker"]')
+    .daterangepicker({
+      timePicker: true,
+      singleDatePicker: true,
+      timePickerIncrement: 1,
+      locale: {
+        format: "h:mm A",
+      },
+    })
+    .on("show.daterangepicker", function (ev, picker) {
+      picker.container.find(".calendar-table").hide();
+    });
 });
 function editEvent(eventId, e) {
   e.stopPropagation();
@@ -147,27 +186,26 @@ function editEvent(eventId, e) {
   $("#start-hour").val(event.shour);
   $("#end-date").val(event.edate);
   $("#end-hour").val(event.ehour);
+  $("#colorPick").val(event.color);
   $('input[name="daterange"]').daterangepicker({
     locale: {
       format: "DD/MM/YYYY",
-      cancelLabel: "Clear",
     },
     singleDatePicker: true,
     autoUpdateInput: true,
     minDate: "29/03/2020",
     maxDate: "02/05/2020",
   });
-  $('input[name="datetimes"]').daterangepicker({
-    singleDatePicker: true,
-    autoUpdateInput: true,
-    timePicker: true,
-    timePickerSeconds: true,
-    timePicker24Hour: true,
-    locale: {
-      format: "HH:mm a",
-    },
-  });
-  $('input[name="daterange"]').on("cancel.daterangepicker", function () {
-    $(this).val("");
-  });
+  $('input[name="timepicker"]')
+    .daterangepicker({
+      timePicker: true,
+      singleDatePicker: true,
+      timePickerIncrement: 1,
+      locale: {
+        format: "h:mm A",
+      },
+    })
+    .on("show.daterangepicker", function (ev, picker) {
+      picker.container.find(".calendar-table").hide();
+    });
 }
